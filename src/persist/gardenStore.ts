@@ -71,7 +71,12 @@ export function loadGarden(
       // Unknown schema: reset safely rather than migrate mid-prototype.
       return defaultGarden(gridSize);
     }
-    if (!Array.isArray(parsed.tiles) || parsed.tiles.length === 0 || !parsed.playerPos) {
+    const expectedTileCount = gridSize * gridSize;
+    if (
+      !Array.isArray(parsed.tiles) ||
+      parsed.tiles.length !== expectedTileCount ||
+      !parsed.playerPos
+    ) {
       return defaultGarden(gridSize);
     }
     if (
