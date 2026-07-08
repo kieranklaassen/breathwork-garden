@@ -48,7 +48,6 @@ export class BreathEngine {
   private phaseStartedAt = 0;
   private listeners = new Set<BreathListener>();
   private onComplete: (() => void) | null = null;
-  private lastPhaseKind: string | null = null;
 
   on(listener: BreathListener): () => void {
     this.listeners.add(listener);
@@ -95,7 +94,6 @@ export class BreathEngine {
     this.lifecycle = 'running';
     this.clock.start(wallMs);
     this.phaseStartedAt = 0;
-    this.lastPhaseKind = null;
     this.emit(wallMs);
   }
 
@@ -227,19 +225,6 @@ export class BreathEngine {
     };
   }
 
-  /** Expose phase change for audio (kind string when phase index changes). */
-  consumePhaseChange(wallMs: number = performance.now()): PhaseDef | null {
-    const phase = this.phases[this.index];
-    if (!phase || this.lifecycle !== 'running' && this.lifecycle !== 'paused') {
-      return null;
-    }
-    const key = `${this.index}:${phase.kind}`;
-    if (key === this.lastPhaseKind) return null;
-    this.lastPhaseKind = key;
-    void wallMs;
-    return phase;
-  }
-
   private maxRound(): number {
     let m = 0;
     for (const p of this.phases) m = Math.max(m, p.round);
@@ -262,7 +247,6 @@ export class BreathEngine {
   private advancePhase(phaseStartSessionMs: number, wallMs: number): void {
     this.index += 1;
     this.phaseStartedAt = phaseStartSessionMs;
-    this.lastPhaseKind = null;
     if (this.index >= this.phases.length) {
       this.complete();
       return;
@@ -292,7 +276,6 @@ export class BreathEngine {
     this.phases = [];
     this.index = 0;
     this.phaseStartedAt = 0;
-    this.lastPhaseKind = null;
     this.emit();
   }
 

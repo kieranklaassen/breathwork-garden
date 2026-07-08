@@ -231,8 +231,9 @@ export class TileGrid {
     for (const [key, g] of this.growing) {
       g.t += dt;
       const s = Math.min(1, g.t / g.duration);
-      // sprout → stem → bloom curve
-      const curved = s < 0.35 ? s / 0.35 * 0.35 : 0.35 + ((s - 0.35) / 0.65) * 0.65;
+      // sprout → stem → bloom curve (slow sprout, faster bloom)
+      const curved =
+        s < 0.35 ? (s / 0.35) * 0.15 : 0.15 + ((s - 0.35) / 0.65) * 0.85;
       g.plant.setGrowth(curved);
       g.plant.update(dt, time);
       if (s >= 1) {
