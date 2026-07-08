@@ -89,7 +89,11 @@ export function loadGarden(
     }
     if (
       !Number.isFinite(parsed.playerPos.x) ||
-      !Number.isFinite(parsed.playerPos.z)
+      !Number.isFinite(parsed.playerPos.z) ||
+      parsed.playerPos.x < 0 ||
+      parsed.playerPos.z < 0 ||
+      parsed.playerPos.x >= gridSize ||
+      parsed.playerPos.z >= gridSize
     ) {
       return defaultGarden(gridSize);
     }

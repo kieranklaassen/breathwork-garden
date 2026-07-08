@@ -169,7 +169,7 @@ export class Hud {
 
     pauseBtn.disabled = snap.lifecycle === 'sitting' || snap.lifecycle === 'growing';
     (this.root.querySelector('#finish-btn') as HTMLButtonElement).disabled =
-      snap.lifecycle === 'growing';
+      snap.lifecycle === 'growing' || snap.lifecycle === 'sitting';
   }
 }
 

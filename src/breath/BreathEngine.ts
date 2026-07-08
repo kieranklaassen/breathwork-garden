@@ -128,7 +128,7 @@ export class BreathEngine {
   endRetention(wallMs: number = performance.now()): void {
     const phase = this.phases[this.index];
     if (
-      this.lifecycle !== 'running' ||
+      (this.lifecycle !== 'running' && this.lifecycle !== 'paused') ||
       !phase ||
       phase.kind !== 'retentionUser'
     ) {
@@ -143,11 +143,7 @@ export class BreathEngine {
    * including empty retention, without requiring endRetention first.
    */
   finishSession(): void {
-    if (
-      this.lifecycle !== 'running' &&
-      this.lifecycle !== 'paused' &&
-      this.lifecycle !== 'sitting'
-    ) {
+    if (this.lifecycle !== 'running' && this.lifecycle !== 'paused') {
       return;
     }
     this.complete();
